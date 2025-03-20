@@ -18,6 +18,10 @@ app.use((err, req, res, next) => {
 // Routes
 app.use('/api/users', require('./routes/users'));
 app.use('/api/referrals', require('./routes/referrals'));
+app.use('/',(req, res) => {
+    res.send('Welcome to the Referral API');
+  }
+);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
