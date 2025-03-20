@@ -3,12 +3,13 @@ const jwt = require('jsonwebtoken');
 const AsyncHandler = require('express-async-handler');
 
 // Generate JWT token
-const generateToken = (id, name, email) => jwt.sign(
+const generateToken = (id, name, email, role) => jwt.sign(
   {
     user: {
       name: name,
       email: email,
       id: id,
+      role: role,
     },
   },
   process.env.JWT_SECRET,
@@ -37,7 +38,8 @@ register = AsyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      token: generateToken(user._id, user.name, user.email)
+      role: user.role,
+      token: generateToken(user._id, user.name, user.email, user.role)
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -59,7 +61,8 @@ login = AsyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        token: generateToken(user._id,user.email, user.name)
+        role: user.role,
+        token: generateToken(user._id, user.name, user.email, user.role)
       });
     } catch (error) {
       res.status(500).json({ message: error.message });

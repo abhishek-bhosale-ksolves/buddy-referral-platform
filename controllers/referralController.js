@@ -8,7 +8,6 @@ const createReferral = AsyncHandler(async (req, res) => {
       candidateName, 
       candidateEmail, 
       candidatePhone, 
-      resumeUrl, 
       position, 
       experience,
     } = req.body;
@@ -17,7 +16,6 @@ const createReferral = AsyncHandler(async (req, res) => {
       candidateName,
       candidateEmail,
       candidatePhone,
-      resumeUrl,
       position,
       experience,
       referredBy: req.user.id
@@ -34,16 +32,15 @@ const getReferrals = AsyncHandler(async (req, res) => {
     console.log("**********")
     console.log(req.user);
   try {
-    
-    // Filter by user role (HR sees all, employees see only their own)
-    if (req.user.role !== 'hr') {
-        const referrals = await Referral.find({ referredBy: req.user.id });
-        return res.status(200).json(referrals);
-    }
-    else {
+
+    if(req.user.role === 'hr') {
         const referrals = await Referral.find({});
         return res.status(200).json(referrals);
     }
+    
+    const referrals = await Referral.find({ referredBy: req.user.id });
+    return res.status(200).json(referrals);
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
