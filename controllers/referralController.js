@@ -29,8 +29,6 @@ const createReferral = AsyncHandler(async (req, res) => {
 
 // Get all referrals (HR can see all, employees see only their own)
 const getReferrals = AsyncHandler(async (req, res) => {
-    console.log("**********")
-    console.log(req.user);
   try {
 
     if(req.user.role === 'hr') {
@@ -57,7 +55,6 @@ const getReferralById = AsyncHandler(async (req, res) => {
         return res.status(200).json(referral);
     }
     const referral = await Referral.find({ _id: req.params.id, referredBy: req.user.id });
-    console.log(referral);
     if (referral.length === 0) {
       return res.status(404).json({ message: 'Referral not found' });
     }
@@ -131,9 +128,6 @@ const updateReferral = AsyncHandler(async (req, res) => {
 const deleteReferral = AsyncHandler(async (req, res) => {
   try {
     const referral = await Referral.findById({_id: req.params.id, referredBy: req.user.id});
-
-    console.log(referral);
-    console.log(referral.referredBy.toString());
     
     if (referral.length === 0) {
       return res.status(404).json({ message: 'Referral not found' });

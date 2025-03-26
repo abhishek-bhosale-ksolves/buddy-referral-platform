@@ -81,7 +81,6 @@ getAllUsers = AsyncHandler(async (req, res) => {
 // Get current user profile
 getUserInfo = AsyncHandler(async (req, res) => {
   try {
-    console.log(req.user);
     const user = await User.findById(req.user.id).select('-password');
     
     if (!user) {
